@@ -46,7 +46,6 @@ class BillSplitHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<BillSplitModel>(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -69,74 +68,78 @@ class BillSplitHome extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Total",
-                            style: GoogleFonts.poppins(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 25,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            model.bill,
-                            style: GoogleFonts.poppins(
-                              textStyle: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 22,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+              Consumer<BillSplitModel>(
+                builder: (context, model, child) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Row(
-                        children: [
-                          Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Friends", style: infoStyle),
-                              Text("Tax", style: infoStyle),
-                              Text("Tip", style: infoStyle),
+                              Text(
+                                "Total",
+                                style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                model.bill,
+                                style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
                             children: [
-                              Text(model.friendsValue.round().toString(),
-                                  style: infoStyle),
-                              Text("${model.tax}%", style: infoStyle),
-                              Text('\$${model.tip.round().toString()}',
-                                  style: infoStyle),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Friends", style: infoStyle),
+                                  Text("Tax", style: infoStyle),
+                                  Text("Tip", style: infoStyle),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(model.friendsValue.round().toString(),
+                                      style: infoStyle),
+                                  Text("${model.tax}%", style: infoStyle),
+                                  Text('\$${model.tip.round().toString()}',
+                                      style: infoStyle),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
               SizedBox(
                 height: 20,
@@ -150,52 +153,36 @@ class BillSplitHome extends StatelessWidget {
                   ),
                 ),
               ),
-              Slider(
-                min: 0,
-                max: 15,
-                divisions: 15,
-                activeColor: Colors.orange,
-                inactiveColor: Colors.black,
-                value: model.friendsValue,
-                onChanged: (value) {
-                  model.setFriendsValue(value);
+              Consumer<BillSplitModel>(
+                builder: (context, model, child) {
+                  return Slider(
+                    min: 0,
+                    max: 15,
+                    divisions: 15,
+                    activeColor: Colors.orange,
+                    inactiveColor: Colors.black,
+                    value: model.friendsValue,
+                    onChanged: (value) {
+                      model.setFriendsValue(value);
+                    },
+                  );
                 },
               ),
-              Row(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Tip',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
+              Consumer<BillSplitModel>(
+                builder: (context, model, child) {
+                  return Row(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Column(
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                model.setTip(model.tip + 1);
-                              },
-                              icon: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                            ),
                             Text(
-                              '\$${model.tip.round().toString()}',
+                              'Tip',
                               style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.w700,
@@ -204,59 +191,83 @@ class BillSplitHome extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {
-                                model.setTip(model.tip - 1);
-                              },
-                              icon: Icon(
-                                Icons.remove,
-                                color: Colors.white,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    model.setTip(model.tip + 1);
+                                  },
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  '\$${model.tip.round().toString()}',
+                                  style: GoogleFonts.montserrat(
+                                    textStyle: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    model.setTip(model.tip - 1);
+                                  },
+                                  icon: Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: TextFormField(
-                        onChanged: (value) {
-                          model.setTax(value);
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          focusColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          labelText: 'Tax in %',
-                          labelStyle: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(7.0),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              model.setTax(value);
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              focusColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              labelText: 'Tax in %',
+                              labelStyle: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            style: TextStyle(
                               color: Colors.white,
                             ),
                           ),
                         ),
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
               SizedBox(height: 30),
               Row(
@@ -290,34 +301,38 @@ class BillSplitHome extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              TextButton(
-                style: TextButton.styleFrom(backgroundColor: Colors.black),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ResultPage(
-                        bill: model.bill.isNotEmpty ? model.bill : '0',
-                        tax: model.tax.isNotEmpty ? model.tax : '0',
-                        friends:
-                            model.friendsValue < 1 ? 1 : model.friendsValue,
-                        tip: model.tip,
+              Consumer<BillSplitModel>(
+                builder: (context, model, child) {
+                  return TextButton(
+                    style: TextButton.styleFrom(backgroundColor: Colors.black),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResultPage(
+                            bill: model.bill.isNotEmpty ? model.bill : '0',
+                            tax: model.tax.isNotEmpty ? model.tax : '0',
+                            friends:
+                                model.friendsValue < 1 ? 1 : model.friendsValue,
+                            tip: model.tip,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Center(
+                      child: Text(
+                        'Split Bill',
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 25,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
                   );
                 },
-                child: Center(
-                  child: Text(
-                    'Split Bill',
-                    style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
